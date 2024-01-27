@@ -1,20 +1,32 @@
-const net = require("net");
-const readline = require("node:readline/promises");
+const net = require('net');
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
+const PORT = 3000;
+const HOST = 'localhost';
+
+const client = new net.Socket();
+
+client.connect(PORT, HOST, () => {
+    console.log('Connected to server');
+    console.log('Type EXIT to quit');
+
+    process.stdin.on('data', (data) => {
+        const input = data.toString().trim();
+        client.write(input);
+        if (input === 'EXIT') {
+            console.log('Exiting...');
+            client.end();
+        }
+    });
 });
 
-const socket = net.createConnection(
-  { host: "127.0.0.1", port: 3000 },
-  async () => {
-    console.log("Connesso al server");
-    const message = await rl.question("Inserisci la tua scelta:");
-    socket.write(message);
-  }
-);
+client.on('data', (data) => {
+    console.log(data.toString().trim());
+});
 
-socket.on("end", () => {
-  console.log("Connessione terminata");
+client.on('close', () => {
+    console.log('Connection closed');
+});
+
+client.on('error', (err) => {
+    console.error('Connection error:', err);
 });

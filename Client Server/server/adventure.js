@@ -1,33 +1,18 @@
-const matrix = [primaAvventura, 
-                secondaAvventura, 
-                terzaAvventura, 
-                quartaAvventura, 
-                quintaAvventura
-                ];
-
-function primaAvventura(answewr) {
-    return answewr;
+function adventureGame(socket) {
+    socket.write('Welcome to the game!\n');
+    socket.write('Please enter your name: ');
 }
 
-function secondaAvventura(answewr) {
-    return answewr;
+function writeToClient(socket, message) {
+    socket.write(`Message from external module: ${message}\n`);
 }
 
-function terzaAvventura(answewr) {
-    return answewr;
-}
-
-function quartaAvventura(answewr) {   
-    return answewr;
-}
-
-function quintaAvventura(answewr) {
-    return answewr;
+function Died(socket) {   
+    socket.end('Sorry, the Adventure is end!\n');
 }
 
 module.exports = {
-    matrix: matrix
+    writeToClient,
+    adventureGame,
+    Died
 };
-
-
- 

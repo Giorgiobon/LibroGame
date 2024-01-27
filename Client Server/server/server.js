@@ -1,32 +1,35 @@
-const adventures = require('./adventure.js');
 const net = require('net');
-const i = 0;
+const externalModule = require('./adventure.js');
 
-const server = net.createServer(socket => {
+const PORT = 3000;
+const server = net.createServer();
+
+server.on('connection', (socket) => {
   console.log('Client connected');
+  externalModule.adventureGame(socket);
 
-  socket.on('data', data => {
-    const expression = data.toString().trim();
-
-    if (expression === 'exit') {
-      socket.end('Goodbye!');
-      console.log('Client disconnected');
+  socket.on('data', (data) => {
+    const name = data.toString().trim();
+    socket.write(`Welcome ${name}!\n`);
+    /*socket.write('You want start the adventure?\n(Type YES or EXIT)\n');
+    const message = data.toString().trim();
+    if (message === 'EXIT') {
+      console.log('Client requested to exit.');
+      externalModule.Died(socket);
     } else {
-      console.log(`avventura numero`, i);
-      const adventure = adventures.matrix[i](expression);
-      socket.write(`Result: ${adventure}\n`);
-    }
+      externalModule.writeToClient(socket, message);
+    }*/ 
   });
 
   socket.on('end', () => {
     console.log('Client disconnected');
   });
-});
 
-const PORT = 3000;
+  socket.on('error', (err) => {
+      console.error('Socket error:', err);
+    });
+});
 
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-
-
