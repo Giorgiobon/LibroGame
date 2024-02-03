@@ -7,7 +7,7 @@ const server = net.createServer();
 server.on('connection', (socket) => {
   console.log('Client connected');
 
-  adventure.init(socket);
+  adventure.start(socket);
 
   socket.on('end', () => {
     console.log('Client disconnected');
