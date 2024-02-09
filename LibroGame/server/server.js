@@ -1,5 +1,5 @@
 const net = require('net');
-const adventure = require('./adventure');
+const adventure = require('./adventure.js');
 
 const PORT = 3000;
 const server = net.createServer();
